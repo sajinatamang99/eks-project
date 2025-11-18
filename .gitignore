@@ -1,1 +1,2 @@
-.sass-cache/
+tf_infra/.terraform/
+tf_infra/.terraform.lock.hcl

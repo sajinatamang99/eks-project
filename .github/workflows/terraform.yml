@@ -1,0 +1,32 @@
+name: infra
+
+on:
+  push:
+    paths:
+      - 'tf_infra/**'
+      - '.github/workflows/terraform.yml'
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.TF_ASSUME_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform -chdir=tf_infra init -input=false
+
+      - name: Terraform Plan
+        run: terraform -chdir=tf_infra plan -out=tfplan -input=false
+
+      - name: Terraform Apply
+        run: terraform -chdir=tf_infra apply -auto-approve tfplan

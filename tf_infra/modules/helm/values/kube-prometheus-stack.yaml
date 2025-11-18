@@ -1,0 +1,26 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: issuer
+    hosts:
+      - grafana.eks.devopsproject.org
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.eks.devopsproject.org
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: "issuer"
+    hosts:
+      - prometheus.eks.devopsproject.org
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.eks.devopsproject.org
+        

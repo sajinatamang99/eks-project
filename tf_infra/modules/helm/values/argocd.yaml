@@ -1,0 +1,19 @@
+server:
+  extraArgs:
+    - --insecure  # Disable SSL redirection as Ingress handles HTTPS
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: issuer
+    hosts:
+      - argocd.eks.devopsproject.org
+    tls:
+      - secretName: argocd-ingress-tls
+        hosts:
+          - argocd.eks.devopsproject.org
+         

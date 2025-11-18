@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaming
+  namespace: web
+  labels:
+    app: gameapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gameapp
+  template:
+    metadata:
+      labels:
+        app: gameapp
+    spec:
+      containers:
+        - name: gameapp
+          image: 380883743609.dkr.ecr.us-east-1.amazonaws.com/eks-project-repo:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: NODE_ENV
+              value: "production"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20

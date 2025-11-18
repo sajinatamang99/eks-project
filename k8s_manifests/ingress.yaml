@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gaming
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    external-dns.alpha.kubernetes.io/hostname: "eks.devopsproject.org"
+spec:
+  tls:
+    - hosts:
+        - eks.devopsproject.org
+      secretName: gaming-tls
+  rules:
+    - host: eks.devopsproject.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gaming
+                port:
+                  number: 80
