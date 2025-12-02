@@ -30,7 +30,7 @@ variable "eks_node_name" {
 
 variable "instance_types" {
   type    = list(string)
-  default = ["t3.medium"]
+  default = ["t3.large"]
 }
 
 variable "disk_size" {

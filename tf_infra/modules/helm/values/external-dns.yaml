@@ -7,7 +7,9 @@ env:
 serviceAccount:
   create: true
   name: external-dns
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 domainFilter:
-  - eks.devopsproject.org
+  - devopsproject.org
   

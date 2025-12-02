@@ -1,3 +1,14 @@
+terraform {
+  required_providers {
+    helm = {
+      source = "hashicorp/helm"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
 # Use the Terraform Helm provider to install Kubernetes add-ons:
 resource "helm_release" "nginx_ingress" {
   name       = "ingress-nginx"
@@ -7,7 +18,6 @@ resource "helm_release" "nginx_ingress" {
 
   create_namespace = true
   namespace        = "ingress-nginx"
-  depends_on = [module.eks]
 
   values = [
     "${file("${path.module}/values/nginx-ingress.yaml")}"
@@ -24,13 +34,6 @@ resource "helm_release" "cert_manager" {
 
   values = [
     "${file("${path.module}/values/cert-manager.yaml")}"
-  ]
-
-  set = [
-    {
-      name  = "crds.enabled"
-      value = "true"
-    }
   ]
 }
 
@@ -72,6 +75,7 @@ resource "helm_release" "kube_prometheus_stack" {
 
   create_namespace = true
   namespace        = "monitoring"
+  timeout = 1800
 
   values = [
     "${file("${path.module}/values/kube-prometheus-stack.yaml")}"
@@ -79,4 +83,3 @@ resource "helm_release" "kube_prometheus_stack" {
 
   depends_on = [helm_release.nginx_ingress, helm_release.cert_manager, helm_release.external_dns]
 }
-

@@ -5,5 +5,8 @@ extraArgs:
 serviceAccount:
   create: true
   name: cert-manager
-
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+crds:
+  enabled: true
   
